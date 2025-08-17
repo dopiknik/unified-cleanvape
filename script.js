@@ -594,7 +594,87 @@ $(document).ready(function () {
   }, 5000);
 });
 
+// ===============================
+// MOBILE BURGER MENU FUNCTIONALITY
+// ===============================
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileBurger = document.getElementById('mobileBurger');
+  const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+  const mobileNavClose = document.getElementById('mobileNavClose');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  const body = document.body;
 
+  // Open mobile menu
+  function openMobileNav() {
+    if (mobileBurger && mobileNavOverlay) {
+      mobileBurger.setAttribute('aria-expanded', 'true');
+      mobileNavOverlay.classList.add('open');
+      body.classList.add('mobile-nav-open');
+    }
+  }
+
+  // Close mobile menu
+  function closeMobileNav() {
+    if (mobileBurger && mobileNavOverlay) {
+      mobileBurger.setAttribute('aria-expanded', 'false');
+      mobileNavOverlay.classList.remove('open');
+      body.classList.remove('mobile-nav-open');
+    }
+  }
+
+  // Toggle mobile menu
+  function toggleMobileNav() {
+    const isOpen = mobileBurger?.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  }
+
+  // Event listeners
+  if (mobileBurger) {
+    mobileBurger.addEventListener('click', toggleMobileNav);
+  }
+
+  if (mobileNavClose) {
+    mobileNavClose.addEventListener('click', closeMobileNav);
+  }
+
+  // Close menu when clicking on overlay background
+  if (mobileNavOverlay) {
+    mobileNavOverlay.addEventListener('click', function(e) {
+      if (e.target === mobileNavOverlay) {
+        closeMobileNav();
+      }
+    });
+  }
+
+  // Close menu when clicking on navigation links
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      closeMobileNav();
+      // Small delay to ensure smooth transition before navigation
+      setTimeout(() => {
+        // fullPage.js will handle the navigation
+      }, 300);
+    });
+  });
+
+  // Close menu on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && mobileNavOverlay?.classList.contains('open')) {
+      closeMobileNav();
+    }
+  });
+
+  // Handle window resize - close menu if switching to desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 767 && mobileNavOverlay?.classList.contains('open')) {
+      closeMobileNav();
+    }
+  });
+});
 
 
 // Простое управление иконкой скролла
