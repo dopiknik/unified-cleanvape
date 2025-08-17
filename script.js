@@ -72,88 +72,112 @@ $(document).ready(function () {
     menuClick = true;
   });
 
-  $('#fullpage').fullpage({
-    anchors: ['firstPage', 'secondPage', '3rdPage', '4thpage'],
-    css3: true,
-    licenseKey: 'OPEN-SOURCE-GPLV3-LICENSE',
-    afterLoad: function(origin, destination) {
-      highlightActiveMenuItem(destination.index);
-      updateMenuStyle(destination.index);
-      
-      // CleanVape: показать элементы управления при входе в section3
-      if (destination.index === 3) {
-        document.getElementById('section3').classList.add('active');
-        // Запуск анимации статистики если находимся на втором слайде
-        setTimeout(() => {
-          if (cleanvapeCurrentSlide === 1) {
-            startCleanvapeAnimation();
+  // Функция для инициализации fullPage.js только на десктопе
+  function initFullPage() {
+    if (window.innerWidth > 767) {
+      // Инициализация fullpage.js для десктопа
+      if (!$('#fullpage').hasClass('fp-enabled')) {
+        $('#fullpage').fullpage({
+          anchors: ['firstPage', 'secondPage', '3rdPage', '4thpage'],
+          css3: true,
+          licenseKey: 'OPEN-SOURCE-GPLV3-LICENSE',
+          afterLoad: function(origin, destination) {
+            highlightActiveMenuItem(destination.index);
+            updateMenuStyle(destination.index);
+            
+            // CleanVape: показать элементы управления при входе в section3
+            if (destination.index === 3) {
+              document.getElementById('section3').classList.add('active');
+              // Запуск анимации статистики если находимся на втором слайде
+              setTimeout(() => {
+                if (cleanvapeCurrentSlide === 1) {
+                  startCleanvapeAnimation();
+                }
+              }, 300);
+            } else {
+              document.getElementById('section3').classList.remove('active');
+            }
+          },
+          onLeave: function(origin, destination) {
+            // CleanVape: скрыть элементы управления при уходе из section3
+            if (origin.index === 3) {
+              document.getElementById('section3').classList.remove('active');
+            }
+          },
+          afterSlideLoad: function (section, origin, destination) {
+            const sectionIndex = section.index;
+            currentSlides[sectionIndex] = destination.index;
+            
+            // CleanVape: обновление навигации при смене слайдов в section3
+            if (sectionIndex === 3) {
+              updateCleanvapeSlideNavigation(destination.index);
+              cleanvapeCurrentSlide = destination.index;
+              
+              // Запуск анимации при переходе на второй слайд
+              if (destination.index === 1) {
+                setTimeout(startCleanvapeAnimation, 300);
+              }
+            }
+          },
+          onLeave: function (origin, destination, direction) {
+            if (menuClick) {
+              menuClick = false;
+              return true;
+            }
+            const sectionIndex = origin.index;
+            const currentSlideIndex = currentSlides[sectionIndex] || 0;
+            
+            // CleanVape: обработка колесика для section3
+            if (sectionIndex === 3 && !isSliding) {
+              if (direction === 'down' && cleanvapeCurrentSlide === 0) {
+                isSliding = true;
+                fullpage_api.moveSlideRight();
+                setTimeout(() => isSliding = false, 700);
+                return false;
+              }
+              if (direction === 'up' && cleanvapeCurrentSlide === 1) {
+                isSliding = true;
+                fullpage_api.moveSlideLeft();
+                setTimeout(() => isSliding = false, 700);
+                return false;
+              }
+            }
+            
+            if (slideSections.includes(sectionIndex) && !isSliding) {
+              const numSlides = $('.section').eq(sectionIndex).find('.slide').length;
+              if (direction === 'down' && currentSlideIndex < numSlides - 1) {
+                isSliding = true;
+                fullpage_api.moveSlideRight();
+                setTimeout(() => isSliding = false, 700);
+                return false;
+              }
+              if (direction === 'up' && currentSlideIndex > 0) {
+                isSliding = true;
+                fullpage_api.moveSlideLeft();
+                setTimeout(() => isSliding = false, 700);
+                return false;
+              }
+            }
           }
-        }, 300);
-      } else {
-        document.getElementById('section3').classList.remove('active');
+        });
       }
-    },
-    onLeave: function(origin, destination) {
-      // CleanVape: скрыть элементы управления при уходе из section3
-      if (origin.index === 3) {
-        document.getElementById('section3').classList.remove('active');
-      }
-    },
-    afterSlideLoad: function (section, origin, destination) {
-      const sectionIndex = section.index;
-      currentSlides[sectionIndex] = destination.index;
-      
-      // CleanVape: обновление навигации при смене слайдов в section3
-      if (sectionIndex === 3) {
-        updateCleanvapeSlideNavigation(destination.index);
-        cleanvapeCurrentSlide = destination.index;
-        
-        // Запуск анимации при переходе на второй слайд
-        if (destination.index === 1) {
-          setTimeout(startCleanvapeAnimation, 300);
-        }
-      }
-    },
-    onLeave: function (origin, destination, direction) {
-      if (menuClick) {
-        menuClick = false;
-        return true;
-      }
-      const sectionIndex = origin.index;
-      const currentSlideIndex = currentSlides[sectionIndex] || 0;
-      
-      // CleanVape: обработка колесика для section3
-      if (sectionIndex === 3 && !isSliding) {
-        if (direction === 'down' && cleanvapeCurrentSlide === 0) {
-          isSliding = true;
-          fullpage_api.moveSlideRight();
-          setTimeout(() => isSliding = false, 700);
-          return false;
-        }
-        if (direction === 'up' && cleanvapeCurrentSlide === 1) {
-          isSliding = true;
-          fullpage_api.moveSlideLeft();
-          setTimeout(() => isSliding = false, 700);
-          return false;
-        }
-      }
-      
-      if (slideSections.includes(sectionIndex) && !isSliding) {
-        const numSlides = $('.section').eq(sectionIndex).find('.slide').length;
-        if (direction === 'down' && currentSlideIndex < numSlides - 1) {
-          isSliding = true;
-          fullpage_api.moveSlideRight();
-          setTimeout(() => isSliding = false, 700);
-          return false;
-        }
-        if (direction === 'up' && currentSlideIndex > 0) {
-          isSliding = true;
-          fullpage_api.moveSlideLeft();
-          setTimeout(() => isSliding = false, 700);
-          return false;
-        }
+    } else {
+      // Отключение fullpage.js на мобильных
+      if (typeof fullpage_api !== 'undefined' && $('#fullpage').hasClass('fp-enabled')) {
+        fullpage_api.destroy('all');
       }
     }
+  }
+
+  // Инициализация fullPage при загрузке
+  initFullPage();
+
+  // Обработка изменения размера окна
+  $(window).resize(function() {
+    clearTimeout(window.resizeTimeout);
+    window.resizeTimeout = setTimeout(function() {
+      initFullPage();
+    }, 250);
   });
 
   // Map interactive enable/disable

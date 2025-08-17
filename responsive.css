@@ -278,6 +278,25 @@
 }
 
 @media (max-width: 767px) {
+  /* Отключение fullpage стилей на мобильных */
+  #fullpage .section {
+    height: auto !important;
+    min-height: 100vh;
+    position: relative !important;
+    transform: none !important;
+  }
+  
+  body, html {
+    overflow: auto !important;
+    height: auto !important;
+  }
+  
+  .fp-tableCell {
+    display: block !important;
+    height: auto !important;
+    vertical-align: top !important;
+  }
+  
   .sidebar-slide .my-form .grid-2,
   .sidebar-slide .my-form .grid-3 {
     display: block;
