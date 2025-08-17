@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanVape - Break Free from Vaping</title>
+    <meta name="description" content="CleanVape helps you break free from vaping addiction with resources, support, and real-time statistics.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- fullPage.js for desktop -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="desktop-preloader">
+                <div class="loader-animation">
+                    <div class="breath-circle"></div>
+                    <div class="breath-text">Clean Breath, Clean Life</div>
+                </div>
+            </div>
+            <div class="mobile-preloader">
+                <div class="simple-spinner"></div>
+                <p>Loading CleanVape...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar">
+        <!-- Desktop Navigation -->
+        <div class="desktop-nav">
+            <div class="nav-logo">
+                <i class="fas fa-leaf"></i>
+                <span>CleanVape</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#map" class="nav-link">Impact Map</a></li>
+                <li><a href="#donate" class="nav-link">Donate</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#stats" class="nav-link">Statistics</a></li>
+                <li><a href="#help" class="nav-link">Get Help</a></li>
+            </ul>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav">
+            <div class="nav-logo">
+                <i class="fas fa-leaf"></i>
+                <span>CleanVape</span>
+            </div>
+            <button class="burger-menu" id="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="mobile-menu" id="mobile-menu">
+                <ul>
+                    <li><a href="#home" class="mobile-nav-link">Home</a></li>
+                    <li><a href="#map" class="mobile-nav-link">Impact Map</a></li>
+                    <li><a href="#donate" class="mobile-nav-link">Donate</a></li>
+                    <li><a href="#about" class="mobile-nav-link">About</a></li>
+                    <li><a href="#stats" class="mobile-nav-link">Statistics</a></li>
+                    <li><a href="#help" class="mobile-nav-link">Get Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Desktop Sidebar (for forms and quick actions) -->
+    <div id="desktop-sidebar" class="desktop-sidebar">
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="sidebar-content">
+            <h3>Quick Actions</h3>
+            <div class="quick-donate">
+                <h4>Make a Difference</h4>
+                <div class="donate-buttons">
+                    <button class="donate-btn" data-amount="5">$5</button>
+                    <button class="donate-btn" data-amount="10">$10</button>
+                    <button class="donate-btn" data-amount="25">$25</button>
+                    <button class="donate-btn custom-amount">Custom</button>
+                </div>
+            </div>
+            <div class="quick-help">
+                <h4>Need Help?</h4>
+                <button class="help-btn" id="quit-calculator">Quit Calculator</button>
+                <button class="help-btn" id="find-support">Find Support</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div id="fullpage" class="main-content">
+        
+        <!-- Section 1: Home/Counter -->
+        <div class="section" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="title-line">Break Free from</span>
+                        <span class="title-highlight">Vaping Addiction</span>
+                    </h1>
+                    <p class="hero-subtitle">Join thousands who have reclaimed their health and freedom with CleanVape's proven support system.</p>
+                    
+                    <!-- Live Counter -->
+                    <div class="live-counter">
+                        <div class="counter-item">
+                            <div class="counter-number" id="quit-counter">1,247</div>
+                            <div class="counter-label">People Quit Today</div>
+                        </div>
+                        <div class="counter-item">
+                            <div class="counter-number" id="money-saved">$89,432</div>
+                            <div class="counter-label">Money Saved This Week</div>
+                        </div>
+                        <div class="counter-item">
+                            <div class="counter-number" id="health-days">15,892</div>
+                            <div class="counter-label">Healthy Days Gained</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" id="start-journey">Start Your Journey</button>
+                        <button class="btn btn-secondary" id="learn-more">Learn More</button>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="breath-animation">
+                        <div class="breath-circle-hero"></div>
+                        <div class="breath-text-hero">Breathe Free</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Interactive Map -->
+        <div class="section" id="map">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Global Impact Map</h2>
+                    <p>See how CleanVape is making a difference worldwide</p>
+                </div>
+                
+                <div class="map-container">
+                    <div id="world-map" class="world-map">
+                        <!-- Map will be initialized via JavaScript -->
+                        <div class="map-placeholder">
+                            <i class="fas fa-globe"></i>
+                            <p>Interactive world map loading...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="map-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="global-users">45,231</div>
+                                <div class="stat-label">Active Users</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-flag"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="countries">127</div>
+                                <div class="stat-label">Countries</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="success-rate">84%</div>
+                                <div class="stat-label">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Donation -->
+        <div class="section" id="donate">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Support the Movement</h2>
+                    <p>Help us expand our reach and save more lives</p>
+                </div>
+                
+                <div class="donation-content">
+                    <div class="donation-impact">
+                        <h3>Your Impact</h3>
+                        <div class="impact-items">
+                            <div class="impact-item">
+                                <div class="impact-amount">$5</div>
+                                <div class="impact-description">Provides one week of app access for someone in need</div>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-amount">$25</div>
+                                <div class="impact-description">Sponsors a complete quit program for one person</div>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-amount">$100</div>
+                                <div class="impact-description">Funds research for better cessation methods</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="donation-widget">
+                        <h3>Make a Donation</h3>
+                        <div class="donation-amounts">
+                            <button class="amount-btn" data-amount="5">$5</button>
+                            <button class="amount-btn" data-amount="10">$10</button>
+                            <button class="amount-btn" data-amount="25">$25</button>
+                            <button class="amount-btn" data-amount="50">$50</button>
+                            <button class="amount-btn" data-amount="100">$100</button>
+                        </div>
+                        <div class="custom-amount">
+                            <input type="number" id="custom-donation" placeholder="Custom amount" min="1">
+                        </div>
+                        <div class="donation-frequency">
+                            <label>
+                                <input type="radio" name="frequency" value="once" checked>
+                                One-time
+                            </label>
+                            <label>
+                                <input type="radio" name="frequency" value="monthly">
+                                Monthly
+                            </label>
+                        </div>
+                        <div id="paypal-button-container" class="paypal-container">
+                            <!-- PayPal button will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: About/CleanVape -->
+        <div class="section" id="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>About CleanVape</h2>
+                        <p class="lead">CleanVape was founded in 2020 by a team of healthcare professionals and former vapers who understood the struggle of breaking free from nicotine addiction.</p>
+                        
+                        <div class="about-features">
+                            <div class="feature">
+                                <div class="feature-icon">
+                                    <i class="fas fa-heart-pulse"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>Health-First Approach</h4>
+                                    <p>Our methods are backed by medical research and developed with healthcare professionals.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>Community Support</h4>
+                                    <p>Connect with others on the same journey and share experiences in a supportive environment.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <h4>Track Progress</h4>
+                                    <p>Monitor your health improvements, money saved, and milestones achieved.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mission-statement">
+                            <blockquote>
+                                "Our mission is to provide accessible, effective tools and support for anyone looking to break free from vaping addiction and reclaim their health."
+                            </blockquote>
+                            <cite>- Dr. Sarah Chen, CleanVape Founder</cite>
+                        </div>
+                    </div>
+                    
+                    <div class="about-visual">
+                        <div class="stats-visual">
+                            <div class="visual-stat">
+                                <div class="visual-number">50K+</div>
+                                <div class="visual-label">Lives Changed</div>
+                            </div>
+                            <div class="visual-stat">
+                                <div class="visual-number">3 Years</div>
+                                <div class="visual-label">Proven Success</div>
+                            </div>
+                            <div class="visual-stat">
+                                <div class="visual-number">24/7</div>
+                                <div class="visual-label">Support Available</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Statistics -->
+        <div class="section" id="stats">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Real Results, Real Impact</h2>
+                    <p>Data-driven insights into our success and your potential</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-block">
+                        <div class="stat-chart">
+                            <canvas id="success-chart"></canvas>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Success Rate by Program Length</h3>
+                            <ul>
+                                <li>30 days: <span class="stat-value">67%</span></li>
+                                <li>90 days: <span class="stat-value">84%</span></li>
+                                <li>1 year: <span class="stat-value">92%</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-block">
+                        <div class="stat-chart">
+                            <canvas id="health-chart"></canvas>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Health Improvements</h3>
+                            <ul>
+                                <li>Lung function: <span class="stat-value">+25%</span></li>
+                                <li>Sleep quality: <span class="stat-value">+40%</span></li>
+                                <li>Energy levels: <span class="stat-value">+35%</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-block">
+                        <div class="stat-chart">
+                            <canvas id="savings-chart"></canvas>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Financial Savings</h3>
+                            <ul>
+                                <li>Average monthly: <span class="stat-value">$127</span></li>
+                                <li>Average yearly: <span class="stat-value">$1,524</span></li>
+                                <li>Total community: <span class="stat-value">$2.3M</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-block">
+                        <div class="stat-chart">
+                            <canvas id="timeline-chart"></canvas>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Your Recovery Timeline</h3>
+                            <ul>
+                                <li>24 hours: Nicotine cleared</li>
+                                <li>72 hours: Breathing improves</li>
+                                <li>2 weeks: Circulation improves</li>
+                                <li>3 months: Lung function increases</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Forms/FAQ/Help -->
+        <div class="section" id="help">
+            <div class="container">
+                <div class="help-content">
+                    <!-- Desktop: Forms in sidebar, FAQ in main content -->
+                    <!-- Mobile: Tabbed interface -->
+                    
+                    <div class="mobile-tabs" id="mobile-tabs">
+                        <button class="tab-btn active" data-tab="calculator">Quit Calculator</button>
+                        <button class="tab-btn" data-tab="support">Find Support</button>
+                        <button class="tab-btn" data-tab="faq">FAQ</button>
+                    </div>
+
+                    <div class="help-sections">
+                        <div class="help-section active" id="calculator-section">
+                            <h2>Quit Calculator</h2>
+                            <p>Calculate your potential savings and health benefits</p>
+                            
+                            <form id="quit-calculator-form" class="calculator-form">
+                                <div class="form-group">
+                                    <label for="daily-spend">Daily spending on vaping ($)</label>
+                                    <input type="number" id="daily-spend" name="daily-spend" min="1" step="0.01" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="years-vaping">Years vaping</label>
+                                    <input type="number" id="years-vaping" name="years-vaping" min="0" step="0.1" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="quit-date">Target quit date</label>
+                                    <input type="date" id="quit-date" name="quit-date" required>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Calculate My Benefits</button>
+                            </form>
+                            
+                            <div id="calculator-results" class="calculator-results" style="display: none;">
+                                <h3>Your Potential Benefits</h3>
+                                <div class="results-grid">
+                                    <div class="result-item">
+                                        <div class="result-number" id="result-monthly">$0</div>
+                                        <div class="result-label">Monthly Savings</div>
+                                    </div>
+                                    <div class="result-item">
+                                        <div class="result-number" id="result-yearly">$0</div>
+                                        <div class="result-label">Yearly Savings</div>
+                                    </div>
+                                    <div class="result-item">
+                                        <div class="result-number" id="result-lifetime">$0</div>
+                                        <div class="result-label">Lifetime Savings</div>
+                                    </div>
+                                    <div class="result-item">
+                                        <div class="result-number" id="result-health">+25%</div>
+                                        <div class="result-label">Lung Function</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="help-section" id="support-section">
+                            <h2>Find Support</h2>
+                            <p>Connect with professional help and community resources</p>
+                            
+                            <form id="support-form" class="support-form">
+                                <div class="form-group">
+                                    <label for="support-name">Your Name</label>
+                                    <input type="text" id="support-name" name="support-name" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="support-email">Email Address</label>
+                                    <input type="email" id="support-email" name="support-email" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="support-location">Location (City, State)</label>
+                                    <input type="text" id="support-location" name="support-location">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="support-type">Type of Support Needed</label>
+                                    <select id="support-type" name="support-type" required>
+                                        <option value="">Select support type</option>
+                                        <option value="counseling">Professional Counseling</option>
+                                        <option value="group">Support Groups</option>
+                                        <option value="medical">Medical Assistance</option>
+                                        <option value="online">Online Community</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="support-message">Tell us about your situation (optional)</label>
+                                    <textarea id="support-message" name="support-message" rows="4"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">Find Support</button>
+                            </form>
+                        </div>
+
+                        <div class="help-section" id="faq-section">
+                            <h2>Frequently Asked Questions</h2>
+                            
+                            <div class="faq-list">
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How long does it take to quit vaping?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>The timeline varies for everyone, but most people see significant improvements within the first 72 hours. Physical withdrawal symptoms typically last 2-4 weeks, while psychological habits can take longer to break. Our program provides support throughout the entire process.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        What makes CleanVape different from other programs?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>CleanVape combines evidence-based medical approaches with community support and personalized tracking. Our program is specifically designed for vaping cessation, not smoking, addressing the unique challenges vapers face.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        Is the program really free?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Yes, our basic program is completely free. We also offer premium features for those who want additional support, but you can succeed with our free tools alone.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        What if I relapse?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Relapses are common and nothing to be ashamed of. Our program includes relapse prevention strategies and support for getting back on track. Many successful quitters had multiple attempts before succeeding permanently.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <button class="faq-question">
+                                        How do I track my progress?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <p>Our platform tracks various metrics including days smoke-free, money saved, health improvements, and milestones achieved. You'll receive regular updates and can see your progress in real-time.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-leaf"></i>
+                        <span>CleanVape</span>
+                    </div>
+                    <p>Empowering people to break free from vaping addiction through community support and proven methods.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#calculator">Quit Calculator</a></li>
+                        <li><a href="#support">Find Support</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="#about">Our Mission</a></li>
+                        <li><a href="#stats">Research</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#donate">Donate</a></li>
+                        <li><a href="#">Volunteer</a></li>
+                        <li><a href="#">Partner With Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 CleanVape. All rights reserved.</p>
+                <p>This platform provides educational information and should not replace professional medical advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- fullPage.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
+    
+    <!-- Chart.js for statistics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js"></script>
+    
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=demo&currency=USD"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
