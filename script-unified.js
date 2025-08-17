@@ -72,14 +72,21 @@
     console.log('Initializing desktop mode');
     
     // Show desktop elements, hide mobile
-    document.getElementById('fullpage').style.display = 'block';
-    document.getElementById('content').style.display = 'none';
-    document.querySelector('.site-header').style.display = 'none';
-    document.querySelector('.main-header').style.display = 'flex';
+    const fullPageEl = document.getElementById('fullpage');
+    const contentEl = document.getElementById('content');
+    const siteHeader = document.querySelector('.site-header');
+    const mainHeader = document.querySelector('.main-header');
+    
+    if (fullPageEl) fullPageEl.style.display = 'block';
+    if (contentEl) contentEl.style.display = 'none';
+    if (siteHeader) siteHeader.style.display = 'none';
+    if (mainHeader) mainHeader.style.display = 'flex';
     
     // Initialize fullPage.js if available
-    if (typeof $.fn.fullpage === 'function') {
+    if (typeof $ === 'function' && typeof $.fn.fullpage === 'function') {
       initFullPage();
+    } else {
+      console.warn('fullPage.js not available, using fallback desktop layout');
     }
     
     initDesktopAnimations();
@@ -247,10 +254,15 @@
     console.log('Initializing mobile mode');
     
     // Show mobile elements, hide desktop
-    document.getElementById('fullpage').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-    document.querySelector('.site-header').style.display = 'flex';
-    document.querySelector('.main-header').style.display = 'none';
+    const fullPageEl = document.getElementById('fullpage');
+    const contentEl = document.getElementById('content');
+    const siteHeader = document.querySelector('.site-header');
+    const mainHeader = document.querySelector('.main-header');
+    
+    if (fullPageEl) fullPageEl.style.display = 'none';
+    if (contentEl) contentEl.style.display = 'block';
+    if (siteHeader) siteHeader.style.display = 'flex';
+    if (mainHeader) mainHeader.style.display = 'none';
     
     initMobileNavigation();
     initMobileScrollEffects();
