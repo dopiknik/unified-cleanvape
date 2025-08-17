@@ -60,6 +60,13 @@
     </div>
 
     <header class="main-header">
+      <!-- Mobile burger button (hidden on desktop) -->
+      <button class="mobile-burger" id="mobileBurger" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
       <div class="logo">
         <a href="#firstPage"><img src="logo.avif" alt="Puffcycle" /></a>
       </div>
@@ -73,6 +80,22 @@
         <button class="nav-btn" id="openSidebar">Order Bin</button>
       </div>
     </header>
+
+    <!-- Mobile navigation overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <nav class="mobile-nav-panel">
+        <div class="mobile-nav-header">
+          <span class="mobile-nav-title">Menu</span>
+          <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">&times;</button>
+        </div>
+        <ul class="mobile-nav-list">
+          <li><a href="#firstPage" class="mobile-nav-link">Home</a></li>
+          <li><a href="#secondPage" class="mobile-nav-link">Location</a></li>
+          <li><a href="#3rdPage" class="mobile-nav-link">Donate</a></li>
+          <li><a href="#4thpage" class="mobile-nav-link">About Us</a></li>
+        </ul>
+      </nav>
+    </div>
 
     <div id="fullpage">
       <div id="section0" class="section active">
