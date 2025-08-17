@@ -3,17 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="style1.css">
-    <link rel="stylesheet" href="style2.css"> -->
-    <link rel="stylesheet" href="base.css" />
-    <link rel="stylesheet" href="layout.css" />
-    <link rel="stylesheet" href="animations.css" />
-    <link rel="stylesheet" href="components.css" />
-    <link rel="stylesheet" href="responsive.css" />
+    <title>Puffcycle / CleanVape — Eco-friendly Vape Recycling</title>
+    <meta name="description" content="CleanVape Solutions — innovative system for collection and recycling of disposable vape devices." />
+    <meta name="theme-color" content="#141414" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <!-- Desktop CSS files (unchanged) -->
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/layout.css" />
+    <link rel="stylesheet" href="styles/animations.css" />
+    <link rel="stylesheet" href="styles/components.css" />
+    <link rel="stylesheet" href="styles/responsive.css" />
+    <!-- External libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.37/fullpage.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   </head>
   <body>
     <div class="preloader">
@@ -57,8 +60,11 @@
         <div class="item"><img src="./assets/preloader/img/9.jpg" alt="" /></div>
         <div class="item"><img src="./assets/preloader/img/10.jpg" alt="" /></div>
       </div>
+      <!-- Mobile preloader skip button -->
+      <button class="preloader-skip" id="preloaderSkip" aria-label="Skip intro">Skip</button>
     </div>
 
+    <!-- Desktop header (default) -->
     <header class="main-header">
       <div class="logo">
         <a href="#firstPage"><img src="logo.avif" alt="Puffcycle" /></a>
@@ -73,6 +79,29 @@
         <button class="nav-btn" id="openSidebar">Order Bin</button>
       </div>
     </header>
+
+    <!-- Mobile header (hidden by default, shown on mobile) -->
+    <header class="site-header" role="banner">
+      <button class="burger" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="#form-faq" class="cta-btn order-btn" id="orderBinBtn">Order Bin</a>
+      <nav class="site-nav" id="mainNav" aria-label="Main navigation">
+        <div class="nav-head">
+          <span class="nav-head-title">Menu</span>
+          <button type="button" class="nav-close-btn" aria-label="Close menu">×</button>
+        </div>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#map">Location</a></li>
+          <li><a href="#donation">Donate</a></li>
+          <li><a href="#cleanvape">CleanVape</a></li>
+          <li><a href="#stats">Stats</a></li>
+          <li><a href="#form-faq">Order Bin</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="nav-overlay" id="navOverlay" hidden></div>
 
     <div id="fullpage">
       <div id="section0" class="section active">
@@ -409,15 +438,266 @@
       </div>
     </div>
 
+    <!-- Mobile content (hidden by default, shown on mobile) -->
+    <main id="content" style="display: none;">
+      <!-- HOME -->
+      <section class="home-counter-section" id="home">
+        <div class="home-counter-inner">
+          <div class="counter-block main" aria-live="polite">
+            <div class="counter-value" id="mainCounter" data-anim="number" data-target="4247">0</div>
+            <span class="counter-label">Trash</span>
+          </div>
+          <p class="home-hint">Scroll to explore ↓</p>
+        </div>
+      </section>
+
+      <!-- MAP -->
+      <section class="map-section" id="map">
+        <div class="section-head container">
+          <h2 class="section-title">Find a Recycling Point</h2>
+          <p class="section-subtitle">Discover locations where you can safely drop disposable vapes.</p>
+        </div>
+        <div class="map-wrapper">
+          <div class="map-frame-wrap">
+            <iframe title="Vape recycling map" id="mapFrameMobile" loading="lazy"
+                    src="https://my.atlist.com/map/ccd9c6bd-6027-498d-b000-b209f5d30a9c?share=true"
+                    allow="geolocation 'self' https://my.atlist.com"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <button class="map-activate-btn" id="activateMap" aria-pressed="false">Enable map interaction</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- DONATION -->
+      <section class="donation-section" id="donation">
+        <div class="container donation-grid">
+          <div class="donation-widget" id="donationWidgetMobile">
+            <div class="donation-form-box">
+              <h2 class="donation-title" id="donationTitle">Make a Difference</h2>
+              <form class="donation-form" id="donationFormMobile" novalidate>
+                <div class="donation-group">
+                  <label for="donationAmountInputMobile" class="donation-label">Donation Amount</label>
+                  <div class="donation-amount-options" role="group" aria-label="Preset amounts">
+                    <button type="button" class="donation-amount-btn" data-amount="10">$10</button>
+                    <button type="button" class="donation-amount-btn" data-amount="25">$25</button>
+                    <button type="button" class="donation-amount-btn" data-amount="50">$50</button>
+                    <button type="button" class="donation-amount-btn" data-amount="100">$100</button>
+                  </div>
+                  <div class="donation-custom-amount">
+                    <span class="donation-currency-symbol">$</span>
+                    <input type="number" id="donationAmountInputMobile" class="donation-input-number" placeholder="Custom amount" min="1" step="1">
+                  </div>
+                </div>
+                <div class="donation-group">
+                  <span class="donation-label" id="freqLabelMobile">Donation Frequency</span>
+                  <div class="donation-toggle" role="radiogroup" aria-labelledby="freqLabelMobile">
+                    <input type="radio" id="donateOneTimeMobile" name="donationFrequencyMobile" value="oneTime" checked>
+                    <label for="donateOneTimeMobile" class="donation-toggle-btn">One-time</label>
+                    <input type="radio" id="donateMonthlyMobile" name="donationFrequencyMobile" value="monthly">
+                    <label for="donateMonthlyMobile" class="donation-toggle-btn">Monthly</label>
+                  </div>
+                </div>
+                <div class="donation-group">
+                  <button type="submit" class="donation-submit-btn">Donate Now</button>
+                  <div class="donation-error" id="donationErrorMobile" aria-live="polite"></div>
+                </div>
+              </form>
+              <div class="donation-secure">
+                <span class="donation-lock-icon" aria-hidden="true"></span>
+                <p>Secure & encrypted processing</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="donation-info">
+            <div class="accordion" id="donationAccordion">
+              <button class="accordion-item" aria-expanded="false">
+                <span class="acc-title">The hidden threat to the environment</span>
+                <span class="acc-icon" aria-hidden="true">+</span>
+                <div class="acc-panel"><p>Millions of disposable vapes end up in landfills daily, poisoning soil with lithium-ion batteries and toxic chemicals. A single discarded vape can pollute groundwater over an area the size of a football field for up to 50 years.</p></div>
+              </button>
+              <button class="accordion-item" aria-expanded="false">
+                <span class="acc-title">Your contribution has real impact</span>
+                <span class="acc-icon" aria-hidden="true">+</span>
+                <div class="acc-panel"><p>Every $10 allows us to safely process 15 vape devices, recover valuable metals for reuse, and keep toxins out of nature. Your support directly protects the ecosystem for future generations.</p></div>
+              </button>
+              <button class="accordion-item" aria-expanded="false">
+                <span class="acc-title">Technology of the future today</span>
+                <span class="acc-icon" aria-hidden="true">+</span>
+                <div class="acc-panel"><p>We use advanced recycling methods: specialized robots disassemble devices and recover 98% of materials for reuse. Old vapes become new batteries for EVs and solar systems.</p></div>
+              </button>
+              <button class="accordion-item" aria-expanded="false">
+                <span class="acc-title">Join the movement</span>
+                <span class="acc-icon" aria-hidden="true">+</span>
+                <div class="acc-panel"><p>You become part of a global eco community. Your name is added to an honor roll of planet defenders, and every month you receive a report detailing the impact of your contribution with photos and stories of protected areas.</p></div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLEANVAPE -->
+      <section class="cleanvape-section" id="cleanvape">
+        <div class="container">
+          <h2 class="gradient-title">CleanVape Solutions</h2>
+          <p class="lead">Innovative system for collection and recycling of vape devices.</p>
+          <p class="desc">We build an ecosystem of responsible e‑cigarette management. We provide stores with modern collection bins and ensure a full recycling cycle.</p>
+          <div class="feature-grid">
+            <div class="feature-card"><i class="fas fa-recycle"></i><h3>Full recycling</h3><p>All components processed responsibly.</p></div>
+            <div class="feature-card"><i class="fas fa-store-alt"></i><h3>For business</h3><p>Free collection bins for retail points.</p></div>
+            <div class="feature-card"><i class="fas fa-chart-bar"></i><h3>Reporting</h3><p>Detailed statistics & certificates.</p></div>
+            <div class="feature-card"><i class="fas fa-headset"></i><h3>24/7 Support</h3><p>Always available for partners.</p></div>
+          </div>
+        </div>
+        <div class="floating-shapes" aria-hidden="true">
+          <span class="shape s1"></span><span class="shape s2"></span><span class="shape s3"></span>
+        </div>
+      </section>
+
+      <!-- STATS -->
+      <section class="stats-section" id="stats">
+        <div class="container">
+          <header class="stats-head">
+            <h2 class="stats-title">Impressive results</h2>
+            <p class="stats-tagline">In 18 months we built the largest smart vape recycling network</p>
+          </header>
+          <div class="primary-stats">
+            <div class="stat-card">
+              <div class="stat-number" data-anim="number" data-target="52000">0</div>
+              <div class="stat-label">Devices recycled</div>
+              <p class="stat-desc">Vapes processed under environmental standards.</p>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" data-anim="number" data-target="280">0</div>
+              <div class="stat-label">Active partners</div>
+              <p class="stat-desc">Stores & retail chains trusting us.</p>
+            </div>
+          </div>
+          <div class="secondary-stats">
+            <div class="mini-stat"><span class="mini-number" data-anim="number" data-target="18">0</span><span class="mini-label">Cities served</span></div>
+            <div class="mini-stat"><span class="mini-number" data-anim="number" data-target="4.2" data-decimal="1">0</span><span class="mini-label">Tons processed</span></div>
+            <div class="mini-stat"><span class="mini-number" data-anim="number" data-target="12000">0</span><span class="mini-label">Active users</span></div>
+            <div class="mini-stat"><span class="mini-number" data-anim="number" data-target="580">0</span><span class="mini-label">kg / month</span></div>
+            <div class="mini-stat"><span class="mini-number" data-anim="number" data-target="98.5" data-decimal="1">0</span><span class="mini-label">% Satisfaction</span></div>
+            <div class="mini-stat"><span class="mini-number" data-anim="number" data-target="3">0</span><span class="mini-label">Days to install</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FORM + FAQ -->
+      <section class="form-faq-section" id="form-faq">
+        <div class="container">
+          <div class="tabs" role="tablist">
+            <button role="tab" aria-selected="true" class="tab-btn" id="tabOrder" data-tab="order" aria-controls="panelOrder">Order Bin</button>
+            <button role="tab" aria-selected="false" class="tab-btn" id="tabFaq" data-tab="faq" aria-controls="panelFaq">FAQ</button>
+          </div>
+          <div class="tab-panels" id="tabPanels">
+            <div id="panelOrder" class="tab-panel" role="tabpanel" aria-labelledby="tabOrder">
+              <form class="order-form order-form--compact" id="orderForm" novalidate>
+                <h2 class="form-title">Order The Bin</h2>
+
+                <div class="form-field">
+                  <label for="reason" class="form-label">Request Type<span aria-hidden="true">*</span></label>
+                  <select id="reason" required>
+                    <option value="">-- Please choose an option --</option>
+                    <option>Request Quote</option>
+                    <option>Send Resume</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="firstName" class="form-label">Name*</label>
+                    <input id="firstName" required autocomplete="name" />
+                  </div>
+                  <div class="form-field">
+                    <label for="lastName" class="form-label">Surname</label>
+                    <input id="lastName" autocomplete="family-name" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="email" class="form-label">Email*</label>
+                    <input id="email" type="email" required autocomplete="email" inputmode="email" />
+                  </div>
+                  <div class="form-field">
+                    <label for="phone" class="form-label">Phone*</label>
+                    <input id="phone" type="tel" required autocomplete="tel" inputmode="tel" />
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="message" class="form-label">Message</label>
+                  <textarea id="message" rows="3" placeholder="Optional details"></textarea>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn primary">Submit</button>
+                  <button type="reset" class="btn ghost">Reset</button>
+                </div>
+                <div class="form-feedback" id="orderFeedback" aria-live="polite"></div>
+              </form>
+            </div>
+
+            <div id="panelFaq" class="tab-panel is-hidden" role="tabpanel" aria-labelledby="tabFaq">
+              <h2 class="form-title">FAQ</h2>
+              <div class="faq-list" id="faqList">
+                <details class="faq-item"><summary>What types of waste can I put in the bin?</summary><p>You can dispose of household waste, recyclables, and organic materials. Hazardous materials like chemicals, batteries, and electronics are not accepted.</p></details>
+                <details class="faq-item"><summary>How quickly can I get a bin delivered?</summary><p>Standard delivery is within 24-48 hours. Same-day delivery is available for urgent requests with an additional fee.</p></details>
+                <details class="faq-item"><summary>What are your pricing options?</summary><p>Pricing varies by bin size and rental duration. Small bins start from $50/week, medium from $75/week, and large bins from $100/week.</p></details>
+                <details class="faq-item"><summary>Do you service my area?</summary><p>We service most metropolitan areas and surrounding suburbs. Enter your postcode during booking to check availability.</p></details>
+                <details class="faq-item"><summary>How do you handle recycling?</summary><p>We sort all materials at our facility and ensure maximum recycling. Over 80% of collected waste is diverted from landfills.</p></details>
+                <details class="faq-item"><summary>How can I contact support?</summary><p>Call us at (555) 123-4567, email support@puffcycle.com, or use the contact form. Our team is available 7 days a week.</p></details>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Mobile footer -->
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h3 class="footer-logo">CleanVape</h3>
+          <p class="footer-text">Eco-friendly vape recycling network.</p>
+        </div>
+        <div>
+          <h4 class="footer-head">Explore</h4>
+          <ul class="foot-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#map">Location</a></li>
+            <li><a href="#donation">Donate</a></li>
+            <li><a href="#cleanvape">CleanVape</a></li>
+            <li><a href="#stats">Stats</a></li>
+            <li><a href="#form-faq">Order Bin</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-head">Contact</h4>
+          <ul class="foot-links">
+            <li><a href="mailto:support@puffcycle.com">support@puffcycle.com</a></li>
+            <li>Tel: (555) 123-4567</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">© <span id="year"></span> CleanVape / Puffcycle. All rights reserved.</div>
+    </footer>
+
     <div class="aniWrap">
       <div class="mouse">
         <div class="scroller"></div>
       </div>
     </div>
 
+    <!-- Mobile back-to-top button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.37/fullpage.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>

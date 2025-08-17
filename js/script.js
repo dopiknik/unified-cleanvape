@@ -1,9 +1,25 @@
 // ===============================
-// Прелоадер, анимации, fullPage.js, карта, sidebar — с подсветкой меню
+// UNIFIED CLEANVAPE SCRIPT
+// Desktop functionality (default) + Mobile functionality (≤ 767px)
 // ===============================
 
+// Device detection
+const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+// Initialize the appropriate version
 $(document).ready(function () {
-  // --- Existing code (unchanged) ---
+  if (isMobile) {
+    initMobileVersion();
+  } else {
+    initDesktopVersion();
+  }
+});
+
+// ===============================
+// DESKTOP VERSION (ORIGINAL FUNCTIONALITY)
+// ===============================
+function initDesktopVersion() {
+  // --- Existing desktop code (unchanged) ---
   function highlightActiveMenuItem(sectionIndex) {
     document.querySelectorAll('.menu .nav-item').forEach(item => {
       item.classList.remove('aactive');
@@ -617,6 +633,465 @@ $(document).ready(function() {
   });
 });
 
+} // End of initDesktopVersion()
+
 // ===============================
-// END OF FILE
+// MOBILE VERSION (NEW FUNCTIONALITY)
+// ===============================
+function initMobileVersion() {
+  const PRELOADER_KEY = 'preloaderSeenStable';
+  const PRELOADER_TIMEOUT = 3200;
+  const DEBUG = false;
+
+  let preloaderFinished = false;
+  let numbersStarted = false;
+
+  function log(...a) { 
+    if (DEBUG) console.log('[MOBILE]', ...a); 
+  }
+
+  function init() {
+    setAppHeightVar();
+    window.addEventListener('resize', setAppHeightVar);
+    window.addEventListener('orientationchange', setAppHeightVar);
+
+    setYear();
+    initPreloader();
+    initNav();
+    initBackToTop();
+    initMapToggle();
+    initDonationWidget();
+    initDonationAccordion();
+    initTabsSlider();
+    initOrderForm();
+    initHashFocus();
+    maybeDeepLinkToFAQ();
+  }
+
+  function setYear() { 
+    const y = document.getElementById('year'); 
+    if (y) y.textContent = new Date().getFullYear(); 
+  }
+  
+  function setAppHeightVar() { 
+    document.documentElement.style.setProperty('--app-dvh', window.innerHeight + 'px'); 
+  }
+
+  /* ---------- Preloader ---------- */
+  function initPreloader() {
+    const body = document.body;
+    const pre = document.getElementById('preloader');
+    const skip = document.getElementById('preloaderSkip');
+    const header = document.querySelector('.site-header');
+    
+    function finish() {
+      if (preloaderFinished) return;
+      preloaderFinished = true;
+      if (pre) { 
+        pre.classList.add('hide'); 
+        setTimeout(() => pre.remove(), 900); 
+      }
+      body.classList.remove('is-locked');
+      header?.classList.add('ready');
+      sessionStorage.setItem(PRELOADER_KEY, '1');
+      startNumbers();
+    }
+    
+    if (!pre) { finish(); return; }
+    if (sessionStorage.getItem(PRELOADER_KEY)) { finish(); return; }
+    
+    setTimeout(finish, PRELOADER_TIMEOUT);
+    skip?.addEventListener('click', () => finish());
+    setTimeout(() => finish(), 9000);
+  }
+
+  /* ---------- Navigation ---------- */
+  function initNav() {
+    const body = document.body;
+    const burger = document.getElementById('burgerBtn');
+    const nav = document.getElementById('mainNav');
+    const overlay = document.getElementById('navOverlay');
+    const closeBtn = nav?.querySelector('.nav-close-btn');
+    let pointerOrigin = null;
+
+    burger?.addEventListener('pointerdown', e => { 
+      pointerOrigin = { x: e.clientX, y: e.clientY }; 
+    });
+    
+    burger?.addEventListener('click', e => {
+      if (pointerOrigin) {
+        const dx = Math.abs(e.clientX - pointerOrigin.x);
+        const dy = Math.abs(e.clientY - pointerOrigin.y);
+        if (dx > 10 || dy > 10) return;
+      }
+      toggleNav();
+    });
+    
+    closeBtn?.addEventListener('click', closeNav);
+
+    function toggleNav() { 
+      burger.getAttribute('aria-expanded') === 'true' ? closeNav() : openNav(); 
+    }
+    
+    function openNav() {
+      burger?.setAttribute('aria-expanded', 'true');
+      nav?.classList.add('open');
+      overlay?.removeAttribute('hidden');
+      overlay?.classList.add('visible');
+      body.style.overflow = 'hidden';
+      trapFocus(nav, burger);
+    }
+    
+    function closeNav() {
+      burger?.setAttribute('aria-expanded', 'false');
+      nav?.classList.remove('open');
+      overlay?.setAttribute('hidden', '');
+      overlay?.classList.remove('visible');
+      if (!body.classList.contains('is-locked')) body.style.overflow = '';
+      releaseFocusTrap();
+    }
+    
+    overlay?.addEventListener('click', closeNav);
+    nav?.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => { 
+        if (burger.offsetParent !== null) closeNav(); 
+      });
+    });
+
+    /* Focus trap */
+    let focusTrapHandler;
+    function trapFocus(container, returnEl) {
+      const sel = 'a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])';
+      const nodes = [...container.querySelectorAll(sel)].filter(el => !el.disabled && el.offsetParent !== null);
+      if (!nodes.length) return;
+      nodes[0].focus();
+      focusTrapHandler = (e) => {
+        if (e.key === 'Escape') { closeNav(); returnEl?.focus(); }
+        if (e.key === 'Tab') {
+          const first = nodes[0], last = nodes[nodes.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      };
+      document.addEventListener('keydown', focusTrapHandler);
+    }
+    
+    function releaseFocusTrap() {
+      if (focusTrapHandler) {
+        document.removeEventListener('keydown', focusTrapHandler);
+        focusTrapHandler = null;
+      }
+    }
+  }
+
+  /* ---------- Back to Top ---------- */
+  function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 600) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  /* ---------- Map Toggle ---------- */
+  function initMapToggle() {
+    const frame = document.getElementById('mapFrameMobile');
+    const btn = document.getElementById('activateMap');
+    if (!frame || !btn) return;
+    btn.addEventListener('click', () => {
+      const active = btn.getAttribute('aria-pressed') === 'true';
+      if (!active) {
+        frame.style.pointerEvents = 'auto';
+        btn.setAttribute('aria-pressed', 'true');
+        btn.textContent = 'Interaction enabled';
+      } else {
+        frame.style.pointerEvents = 'none';
+        btn.setAttribute('aria-pressed', 'false');
+        btn.textContent = 'Enable map interaction';
+      }
+    });
+  }
+
+  /* ---------- Numbers ---------- */
+  function startNumbers() {
+    if (numbersStarted) return;
+    numbersStarted = true;
+    const els = document.querySelectorAll('[data-anim="number"]');
+    els.forEach(el => { el.textContent = '0'; el.dataset.animDone = '0'; });
+
+    function animate(el) {
+      if (!el || el.dataset.animDone === '1') return;
+      el.dataset.animDone = '1';
+      const target = parseFloat(el.dataset.target || '0');
+      const dec = parseInt(el.dataset.decimal || '0', 10);
+      const dur = 2000;
+      const start = performance.now();
+      
+      function frame(now) {
+        const p = Math.min((now - start) / dur, 1);
+        const val = target * p;
+        el.textContent = dec ? val.toFixed(dec) : Math.floor(val).toLocaleString();
+        if (p < 1) requestAnimationFrame(frame);
+        else el.textContent = dec ? target.toFixed(dec) : target.toLocaleString();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { animate(e.target); obs.unobserve(e.target); }
+        });
+      }, { threshold: .4 });
+      els.forEach(n => obs.observe(n));
+    } else {
+      els.forEach(animate);
+    }
+  }
+
+  /* ---------- Donation Widget ---------- */
+  function initDonationWidget() {
+    const widget = document.getElementById('donationWidgetMobile');
+    if (!widget) return;
+    
+    const IS_SANDBOX = false;
+    const HOSTED = 'YOUR_HOSTED_BUTTON_ID';
+    const CURRENCY = 'USD';
+    const PLANS = { 10: 'P-PLANID_FOR_10', 25: 'P-PLANID_FOR_25', 50: 'P-PLANID_FOR_50', 100: 'P-PLANID_FOR_100' };
+    const BASE = IS_SANDBOX ? 'https://www.sandbox.paypal.com' : 'https://www.paypal.com';
+
+    const form = widget.querySelector('#donationFormMobile');
+    const btns = widget.querySelectorAll('.donation-amount-btn');
+    const input = widget.querySelector('#donationAmountInputMobile');
+    const errorBox = widget.querySelector('#donationErrorMobile');
+    let selected = 25;
+
+    highlight(selected);
+    btns.forEach(b => b.addEventListener('click', () => {
+      selected = parseInt(b.dataset.amount, 10);
+      input.value = '';
+      highlight(selected); 
+      clearErr();
+    }));
+    
+    input?.addEventListener('input', () => {
+      if (input.value.trim() !== '') {
+        selected = parseInt(input.value, 10) || 0;
+        btns.forEach(b => b.classList.remove('active'));
+      } else { 
+        highlight(selected); 
+      }
+      clearErr();
+    });
+    
+    form?.addEventListener('submit', e => {
+      e.preventDefault();
+      clearErr();
+      if (selected <= 0) { showErr('Enter a valid amount.'); return; }
+      const freq = widget.querySelector('input[name="donationFrequencyMobile"]:checked')?.value || 'oneTime';
+      if (freq === 'oneTime') {
+        window.open(`${BASE}/donate/?hosted_button_id=${encodeURIComponent(HOSTED)}&amount=${encodeURIComponent(selected)}&currency_code=${encodeURIComponent(CURRENCY)}`, '_blank', 'noopener');
+      } else {
+        const plan = PLANS[selected]; 
+        if (!plan) { showErr('No subscription plan for this amount.'); return; }
+        window.open(`${BASE}/webapps/billing/subscriptions?plan_id=${encodeURIComponent(plan)}`, '_blank', 'noopener');
+      }
+    });
+    
+    function highlight(a) {
+      btns.forEach(b => b.classList.remove('active'));
+      const m = [...btns].find(b => parseInt(b.dataset.amount, 10) === a);
+      if (m) m.classList.add('active');
+    }
+    
+    function showErr(m) { if (errorBox) errorBox.textContent = m; }
+    function clearErr() { if (errorBox) errorBox.textContent = ''; }
+  }
+
+  /* ---------- Donation Accordion ---------- */
+  function initDonationAccordion() {
+    const items = [...document.querySelectorAll('.accordion-item')];
+    items.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const exp = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', exp ? 'false' : 'true');
+      });
+    });
+  }
+
+  /* ---------- Tabs / Slider ---------- */
+  function initTabsSlider() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-tab');
+        const targetId = 'panel' + key.charAt(0).toUpperCase() + key.slice(1);
+        tabBtns.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+        panels.forEach(p => p.classList.toggle('is-hidden', p.id !== targetId));
+      });
+    });
+  }
+
+  /* ---------- Order Form ---------- */
+  function initOrderForm() {
+    const form = document.getElementById('orderForm');
+    const feedback = document.getElementById('orderFeedback');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Clear previous messages
+      if (feedback) {
+        feedback.className = 'form-feedback';
+        feedback.textContent = '';
+      }
+      
+      // List all possible field IDs
+      const possibleFields = [
+        'reason', 'firstName', 'lastName', 'email', 'phone', 'message'
+      ];
+      
+      // Find existing fields
+      const existingFields = [];
+      possibleFields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field && (field.type !== 'hidden')) {
+          existingFields.push({ id: fieldId, element: field });
+        }
+      });
+      
+      // Required fields (exclude message)
+      const requiredFields = existingFields.filter(function(field) {
+        return field.id !== 'message';
+      });
+      
+      let isValid = true;
+      const errors = [];
+      
+      // Check each required field
+      requiredFields.forEach(function(field) {
+        const element = field.element;
+        let value = '';
+        
+        if (element.tagName.toLowerCase() === 'select') {
+          value = element.value;
+        } else if (element.type === 'email') {
+          value = element.value.trim();
+        } else {
+          value = element.value.trim();
+        }
+        
+        // Check if empty
+        if (!value) {
+          isValid = false;
+          errors.push(field.id);
+          
+          // Visual error highlight
+          element.style.border = '2px solid red';
+          element.style.backgroundColor = '#ffe6e6';
+          
+          // Remove error highlight on input
+          const removeError = function() {
+            element.style.border = '';
+            element.style.backgroundColor = '';
+            element.removeEventListener('input', removeError);
+            element.removeEventListener('change', removeError);
+          };
+          
+          element.addEventListener('input', removeError);
+          element.addEventListener('change', removeError);
+        }
+        
+        // Additional email validation
+        if (field.id === 'email' && value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            isValid = false;
+            errors.push('email-invalid');
+            
+            element.style.border = '2px solid red';
+            element.style.backgroundColor = '#ffe6e6';
+            
+            const removeError = function() {
+              element.style.border = '';
+              element.style.backgroundColor = '';
+              element.removeEventListener('input', removeError);
+            };
+            element.addEventListener('input', removeError);
+          }
+        }
+      });
+      
+      // Show result
+      if (feedback) {
+        if (!isValid) {
+          let message = 'Please fill all required fields';
+          if (errors.includes('email-invalid')) {
+            message += ' (check email format)';
+          }
+          message += '.';
+          
+          feedback.textContent = message;
+          feedback.classList.add('err');
+          feedback.style.color = '#ff0000';
+          feedback.style.padding = '10px';
+          feedback.style.marginTop = '10px';
+        } else {
+          feedback.textContent = 'Submitted successfully! We will contact you shortly.';
+          feedback.classList.add('ok');
+          feedback.style.color = '#008000';
+          feedback.style.padding = '10px';
+          feedback.style.marginTop = '10px';
+          
+          // Clear form after success
+          setTimeout(function() {
+            form.reset();
+            setTimeout(function() {
+              if (feedback) {
+                feedback.textContent = '';
+                feedback.className = 'form-feedback';
+                feedback.style.color = '';
+                feedback.style.padding = '';
+                feedback.style.marginTop = '';
+              }
+            }, 4000);
+          }, 100);
+        }
+      }
+    });
+  }
+
+  function maybeDeepLinkToFAQ() {
+    if (location.hash.toLowerCase() === '#faq') {
+      document.querySelector('.tab-btn[data-tab="faq"]')?.click();
+      document.getElementById('panelFaq')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  /* ---------- Hash Focus ---------- */
+  function initHashFocus() {
+    function focusFromHash() {
+      const id = window.location.hash.slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el) {
+        el.setAttribute('tabindex', '-1');
+        el.focus({ preventScroll: true });
+        setTimeout(() => el.removeAttribute('tabindex'), 600);
+      }
+    }
+    window.addEventListener('hashchange', focusFromHash);
+    focusFromHash();
+  }
+
+  // Initialize mobile version
+  init();
+}
+
+// ===============================
+// END OF UNIFIED SCRIPT
 // ===============================
